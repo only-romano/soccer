@@ -1,0 +1,148 @@
+html {
+  height: 100%;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(to left bottom, black, #2d2121) no-repeat 100% 100%;
+  background-attachment: fixed;
+}
+
+.header {
+  position: relative;
+  margin-top: 0;
+  padding: 15px 0 10px 0;
+  background: linear-gradient(to left top, #cae2e3, #ccffff);
+  border-bottom: 2px solid #cae2e3;
+  text-align: right;
+  font-family: 'Blackadder ITC';
+  letter-spacing: 0.5em;
+  color: #cae2e3;
+  text-shadow: black 0 0 3px, #2d2121 2px 5px 5px;
+  z-index: 2;
+}
+
+.logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.carusel {
+  position: relative;
+  margin-bottom: 10%;
+  overflow-x: hidden;
+  z-index: 1;
+}
+
+.arrow-span {
+  float: right;
+  margin-bottom: 10px;
+  z-index: 1;
+}
+
+.arrow {
+  width: 44px;
+  z-index: 1;
+}
+
+.inner-span {
+  position: relative;
+  left: 0px;
+  white-space: nowrap;
+  padding-left: 10px;
+}
+.carusel-img {
+  width: 256px;
+  height: 256px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height:40px;
+  width:100%;
+  background: linear-gradient(to left top, #cae2e3, #ccffff);
+}
+
+
+/* Adaptive blocks */
+
+@media screen and (max-width: 520px) {
+  .logo {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 460px) {
+  .logo {
+    display: block;
+  }
+  .carusel-img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media screen and (max-height: 440px) {
+  .carusel-img {
+    width: 192px;
+    height: 192px;
+  }
+}
+
+@media screen and (max-height: 380px) {
+  .carusel-img {
+    width: 160px;
+    height: 160px;
+  }
+  .footer {
+    height:30px;
+  }
+}
+
+@media screen and (max-height: 340px) {
+  .carusel-img {
+    width: 128px;
+    height: 128px;
+  }
+}
+
+@media screen and (max-width: 315px) {
+  .logo {
+    display: none;
+  }
+  .carusel-img {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+@media screen and (max-width: 230px) {
+  .header {
+  letter-spacing: 0.2em;
+  }
+  .carusel-img {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media screen and (max-width: 170px) {
+  .header {
+  letter-spacing: 0.1em;
+  overflow-x: hidden;
+  }
+  .carusel-img {
+    width: 64px;
+    height: 64px;
+  }
+}
