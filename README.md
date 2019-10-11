@@ -1,10 +1,31 @@
-# Soccer Browser Game
+# _Soccer Heads_
 
 [Available online](https://only-romano.github.io/soccer/)
 
-#### Funny Browser Game with bodyless heads and 10 similar levels (it's speeds up).
+___
 
-##### Браузерная игра с 10 похожими уровнями, головами без тел и спортивным инвентарём.
 
-> apr 2018 (finished)
+###### EN
+
+
+#### Browser Game with bodyless heads and 10 levels (it's speeds up).
+
+
+###### RU
+
+
+#### Браузерная игра с 10 уровнями, головами без тел и спортивным инвентарём.
+
+___
+
+
+> Browser game (single player, serverless)
+
+* State: **RELEASE**
+* Stack:
+    + only vanilla JS
+* _Stages_
+    + Project start: 2018, Mar
+    + Release: 2018, Apr
+
 
