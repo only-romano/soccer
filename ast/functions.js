@@ -286,7 +286,7 @@ class Game {
 
   createOneButton(index) {
     // Creates one button depending of givent index
-    var options = [
+    let options = [
       ['Start Game', this.startGame],  // first button - start the game
       ['Resume Game', this.continueGame],  // second button - never exicted
       ['Exit Game', this.exitGame]  // third button - exit the game
@@ -303,7 +303,7 @@ class Game {
   }
 
   setFirstButton() {
-    // sets first button's top
+    // sets first menu button's top
     if (PAGE.document.clientHeight > PAGE.document.clientWidth)
       this.menu.children[0].style.marginTop = '66%';  // vertical oriented
     else
@@ -317,51 +317,57 @@ class Game {
       this.menu.style.width = PAGE.document.clientWidth + 'px';
       this.menu.style.top = window.pageYOffset + 'px';
       this.menu.style.height = (PAGE.document.clientHeight + 100) + 'px';
-      this.setFirstButton();
+      this.setFirstButton();  // sets first button of menu
     }
     if (this.ball) {
+      // if ball resize field and ball's size and position
       this.setFieldSize();
       this.setBallSizeAndPosition();
     }
     this.playground.scrollIntoView();
-    if (this.usedSlots.length)
-      this.changeMassSpaces();
+    if (this.usedSlots.length)  // if there is enemies
+      this.changeMassSpaces();  // reslot them
   }
 
-  /* EXITS METHODS */
+  /* START-END METHODS */
 
   startGame() {
+    // Game initialisation
+    // Enemy timer's values
     let timers = [750, 900, 1100, 1300, 1500, 1700, 1900, 2100, 2300, 2500];
-    this.createSpaces();
-    this.createEnemiesOnStart();
-    this.createCountdownClock(this.id);
-    setTimeout(() => {
-      PAGE.game.collisionTimer = setInterval(()=>{
+    this.createSpaces();  // creates slots
+    this.createEnemiesOnStart();  // creates initial enemies
+    this.createCountdownClock();  // creates countdown and get-ready timer
+    setTimeout(() => {  // collision checker timeout
+      PAGE.game.collisionTimer = setInterval(()=>{  // game collision interval
         PAGE.game.checkCollisions();
       }, 50);
     }, 4500);
-    setTimeout(() => { this.setEnemyTimer() }, timers[this.id]);
-    this.getOnReservedPosition();
+    setTimeout(() => { this.setEnemyTimer() }, timers[this.id]);  // enemy addition timer
+    this.getOnReservedPosition();  // restore reserved positions at center
   }
 
-  continueGame() {}
+  continueGame() {}  // never finished
 
   exitGame() {
-    this.clearTimers();
-    this.clearGlobalMass();
-    this.field.innerHTML = '';
-    this.field.setAttribute('hidden', true);
-    document.body.removeChild(this.menu);
-    PAGE.endGame();
+    // Finish game
+    this.clearTimers();  // clear intervals
+    this.clearGlobalMass();  // delete arrays from memory
+    this.field.innerHTML = '';  //  delete all inner elements of field
+    this.field.setAttribute('hidden', true);  // hide field
+    document.body.removeChild(this.menu);  // remove menu
+    PAGE.endGame.bind(PAGE)();  // envokes end-game method of PAGE
   }
 
   clearGlobalMass() {
+    // Cleares arrays of memory
     this.freeSlots = [];
     this.usedSlots = [];
     this.reservedSlots = [];
   }
 
   clearTimers() {
+    // Cleares intervals
     clearInterval(this.enemyTimer);
     clearInterval(this.collisionTimer);
   }
@@ -378,7 +384,7 @@ class Game {
     this.field.style.borderColor = this.border;
     this.field.removeAttribute('hidden');
     this.setFieldSize();  // sets up field's size
-    this.field.onclick = this.moveBall;
+    this.field.onclick = this.moveBall.bind(this);
   }
 
   setFieldSize() {
@@ -422,11 +428,12 @@ class Game {
     let x = e.clientX - this.field.getBoundingClientRect().left - 10;
     let y = e.clientY - this.field.getBoundingClientRect().top - 10;
 
+    // field's size limits checks for x
     if (x > this.field.clientWidth - this.ball.clientWidth)
       x = this.field.clientWidth - this.ball.clientWidth;
     else if (x < 0)
       x = 0;
-
+    // and for y
     if (y > this.field.clientHeight - this.ball.clientHeight)
       y = this.field.clientHeight - this.ball.clientHeight;
     else if (y < 0)
@@ -439,35 +446,38 @@ class Game {
   /* GAME */
 
   createSpaces() {
-    let size = getComputedStyle(this.field)
-    let width = parseInt(size.width) / 10;
-    let height = Math.floor(parseInt(size.height) / width);
+    // Creates free slots and push em into an array of available slots
+    let size = getComputedStyle(this.field)  // field's size
+    let width = parseInt(size.width) / 10;   // width of one slot (1/10 of field's width)
+    let height = Math.floor(parseInt(size.height) / width);  // number of vertical slots
 
     for (let i = 0; i < height; i++) {
-      for (let j = 0; j < 9; j++) {
-        let slot = {};
+      for (let j = 0; j < 9; j++) { // there is a 9 horizontal slots (1/10 * 9 + borders etc)
+        let slot = {};  // new slot
         slot.left = (width / 2 + j * width) + 'px';
-        slot.top = (i * width) + 'px';
+        slot.top = (i * width) + 'px';  // they are square-sized
         slot.enemy = false;
 
-        if (j > 2 || j < 6) {
-            let temp = height - Math.floor(height / 2);
+        if (j > 2 || j < 6) { // if they are in a middle
+            let temp = height - Math.floor(height / 2);  // on x and y axis
             if ((i === temp) || (i === (temp-1)) || (i === (temp-2))) {
-              this.reservedSlots.push(slot);
-              return;
+              this.reservedSlots.push(slot);  // they are reserved for future
+              continue; // next iteration
             }
         }
-        this.freeSlots.push(slot);
+        this.freeSlots.push(slot);  // if not in a middle - push to available slots
       }
     }
   }
 
   createEnemiesOnStart(i) {
-    for (let i = 0; i < 10; i++)
-      setTimeout(()=>{new Enemy(this)}, i * 100);
+    // Sets timeout to create 12 of first enemies
+    for (let i = 0; i < 12; i++)
+      setTimeout(()=>{new Enemy()}, i * 100);
   }
 
   createCountdownClock() {
+    // Countdown clock
     let clock = new BaseElement('div', this.field, ['countdown-clock'], {}, {
       'border-color': this.border
     });
@@ -476,14 +486,15 @@ class Game {
     clock.append();
     let timer = setInterval(() => {this.changeCountdownClockInnerHTML()}, 1000);
     this.hideOptionButtons();
-    setTimeout(function(){
+    setTimeout(()=>{
       clearInterval(timer);
-      PAGE.game.field.removeChild(PAGE.game.clock);
-      PAGE.game.menu.setAttribute('hidden', true);
+      this.field.removeChild(this.clock);
+      this.menu.setAttribute('hidden', true);
     }, 4500);
   }
 
   changeCountdownClockInnerHTML() {
+    // Countdown clock changer
     if (this.clock.innerHTML === '<span>Ready!</span>') {
       this.clock.innerHTML = '<span>3</span>';
       this.clock.style.fontSize = '80px';
@@ -498,6 +509,7 @@ class Game {
   }
 
   hideOptionButtons() {
+    // hide menu buttons
     let buttons = document.getElementsByClassName('option-button')
     for (let i = 0; i < buttons.length; i++)
       buttons[i].setAttribute('hidden', true)
@@ -505,52 +517,57 @@ class Game {
 
 
   getOnReservedPosition() {
+    // restore reserved slots
     let length = this.reservedSlots.length;
     for (let i = 0; i < length; i++)
       this.freeSlots.push(this.reservedSlots.pop());
   }
 
   setEnemyTimer() {
-    let timer = [977, 933, 888, 833, 777, 712, 645, 578, 511, 444];
-    PAGE.game.enemyTimer = setInterval(function() {
-      if (PAGE.game.field.children.length > 20) {
-        PAGE.game.gameOver(); // game over;
+    // enemy timerr setter
+    let timer = [877, 833, 788, 733, 677, 612, 545, 478, 411, 344];
+    this.enemyTimer = setInterval(()=> {
+      if (this.usedSlots.length > 27) {
+        this.gameOver(); // game over;
         return;
       }
-      if (PAGE.game.usedSlots.length === 0) {
-        PAGE.game.winGame();
+      if (this.usedSlots.length === 0) {
+        this.winGame();
         return;
       }
-      new Enemy(PAGE.game);
-    }, timer[PAGE.game.id]);
+      if (this.freeSlots.length > 0)
+        new Enemy();
+    }, timer[this.id]);
   }
 
 
   changeMassSpaces() {
     this.createSpacesResize();
-    setTimeout( function() {
-      let length = PAGE.game.usedSlots.length;
-      for (var i = 0; i < length; i++)
-        this.setEnemyPosition( PAGE.game.usedSlots[i].enemy, true );
+    setTimeout(()=>{
+      let length = this.usedSlots.length;
+      for (let i = length-1; i >= 0; i--) {
+        let slot = this.usedSlots.pop();
+        slot.enemy.setPosition.bind(slot.enemy)(false);
+      }
     }, 0);
   }
 
   createSpacesResize() {
-    var newSpacesCatalogue = [];
-    var fieldSize = getComputedStyle(PAGE.game.field)
-    var slotWidth = parseInt(fieldSize.width) / 10;
-    var heightSlots = Math.floor(parseInt(fieldSize.height) / slotWidth);
+    let spaces = [];
+    let size = getComputedStyle(this.field)
+    let width = parseInt(size.width) / 10;
+    let height = Math.floor(parseInt(size.height) / width);
 
-      for (var i = 0; i < heightSlots; i++) {
-        for (var j = 0; j < 9; j++) {
-          var slot = {};
-            slot.left = (slotWidth / 2 + j * slotWidth) + 'px';
-            slot.top = (i * slotWidth) + 'px';
+      for (let i = 0; i < height; i++) {
+        for (let j = 0; j < 9; j++) {
+          let slot = {};
+            slot.left = (width / 2 + j * width) + 'px';
+            slot.top = (i * width) + 'px';
             slot.enemy = false;
-          newSpacesCatalogue.push(slot);
+          spaces.push(slot);
         }
       }
-    this.freeSlots = newSpacesCatalogue;
+    this.freeSlots = spaces;
   }
 
   getFreeSlot(flag){
@@ -564,31 +581,31 @@ class Game {
 
 
   gameOver() {
-    PAGE.game.clearTimers();
-    PAGE.game.menu.removeAttribute('hidden');
-    PAGE.game.createGameOverSign();
-    setTimeout(PAGE.game.exitGame, 5000);
+    this.clearTimers();
+    this.menu.removeAttribute('hidden');
+    this.createGameOverSign();
+    setTimeout(this.exitGame.bind(this), 5000);
   }
 
 
   winGame() {
-    PAGE.game.clearTimers();
-    PAGE.game.menu.removeAttribute('hidden');
-    PAGE.game.createWinSign();
-    setTimeout(PAGE.game.exitGame, 5000);
+    this.clearTimers();
+    this.menu.removeAttribute('hidden');
+    this.createWinSign();
+    setTimeout(this.exitGame.bind(this), 5000);
   }
 
 
   checkCollisions() {
-    var nodesToDel = [];
-    for (var i = 0; i < this.usedSlots.length; i++) {
-      if (this.detectCollision(this.usedSlots[i].enemy)) {
+    let nodesToDel = [];
+    for (let i = 0; i < this.usedSlots.length; i++) {
+      if (this.detectCollision(this.usedSlots[i].enemy.element)) {
         nodesToDel.push(i);
       }
     }
-    for (var j = nodesToDel.length - 1; j >= 0; j--) {
-      var node = this.usedSlots.splice(nodesToDel[j], 1)[0];
-      PAGE.game.field.removeChild(node.enemy);
+    for (let j = nodesToDel.length - 1; j >= 0; j--) {
+      let node = this.usedSlots.splice(nodesToDel[j], 1)[0];
+      this.field.removeChild(node.enemy.element);
       node.enemy = false;
       this.freeSlots.push(node);
     }
@@ -605,16 +622,16 @@ class Game {
 
 
   createGameOverSign() {
-    var gameOverSign = document.createElement('div');
+    let gameOverSign = document.createElement('div');
       gameOverSign.classList.add('game-over-sign');
-    PAGE.game.field.appendChild(gameOverSign);
+    this.field.appendChild(gameOverSign);
   }
 
 
   createWinSign() {
-    var winSign = document.createElement('div');
+    let winSign = document.createElement('div');
       winSign.classList.add('win-sign');
-    PAGE.game.field.appendChild(winSign);
+    this.field.appendChild(winSign);
   }
 }
 
@@ -651,7 +668,7 @@ class Enemy extends BaseElement {
     // Sets position for Enemy's instance element
     let game = PAGE.game;  // just for short
     // Slots object
-    this.slot = game.getFreeSlot(flag).bind(game);
+    this.slot = game.getFreeSlot.bind(game)(flag);
     this.slot.enemy = this;
     // Enemy's element style attributes
     this.element.style.top = this.slot.top;
