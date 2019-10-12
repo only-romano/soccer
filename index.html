@@ -4,20 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="css/carusel.css">
-  <link rel="stylesheet" href="css/soccer.css">
-  <link rel="stylesheet" href="css/menu.css">
   <title>Little games</title>
-  <script src="scripts/functions.js"></script>
+  <link rel="stylesheet" href="ast/soccer.css">
+  <script src="ast/functions.js"></script>
 </head>
-<body class="body">
+<body>
 
-  <h1 class="header"><img style="width: 64px" src="img/logo.png" class="logo">LITTLE GAMES</h1>
+  <h1 class="header">
+    <img style="width: 64px" src="img/logo.png" class="header__logo" alt="logo">
+    <span class="header__title font__soccer">LITTLE GAMES</span>
+  </h1>
 
   <div class="carusel">
-    <span class= "arrow-span">
-      <img class="arrow" src="img/carusel/arrowl.png">
-      <img class="arrow" src="img/carusel/arrowr.png">
+    <span class= "carusel__arrow-span">
+      <img class="carusel__arrow arrow_left" src="img/carusel/arrowl.png">
+      <img class="carusel__arrow arrow_right" src="img/carusel/arrowr.png">
     </span>
   </div>
 
@@ -25,9 +26,10 @@
     <center><div class="field" hidden></div></center>
   </span>
 
-  <div class="footer"></div>
+  <div class="footer">
+    <span class="footer__tm font__soccer">2018</span>
+  </div>
 
-
-  <script src="scripts/soccer.js"></script>
+  <script src="ast/soccer.js"></script>
 </body>
 </html>
