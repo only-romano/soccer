@@ -221,6 +221,13 @@ class Page {
       this.toy = null;  // removes link to object
     }
   }
+
+  undrag(el) {
+    el.ondrag = el.ondragdrop = el.ondragstart =()=> {
+      event.preventDefault();
+      return false;
+    };
+  }
 }
 
 
@@ -412,6 +419,7 @@ class Game {
     }, {'width': '64px'}).append();
     ball.append();
     this.ball = ball.element;  // fix
+    PAGE.undrag(ball.element);
     this.setBallSizeAndPosition();
   }
 
@@ -655,6 +663,7 @@ class Enemy extends BaseElement {
       'width': '32px'
     });
     img.append();
+    PAGE.undrag(img.element);
     return img.element;
   }
 
