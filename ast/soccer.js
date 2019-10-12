@@ -75,11 +75,3 @@ const PAGE = new Page([{
     shellTransition: 'top 0.07s, left 0.07s'
   }
 ]);
-
-
-// globals for spaceMass
-var freeSpacesCatalogue = [];
-var spacesMass = [];
-var reservedSpace = [];
-var enemyTimer;
-var collisionTimer;
